@@ -12,7 +12,6 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
   const product = new Product(req.body.title, req.body.price, req.body.image);
   await product.save();
-  //window.location.replace("/products");
   res.redirect("/products");
 });
 

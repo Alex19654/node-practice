@@ -1,0 +1,42 @@
+<h1>Edit product {{product.title}}</h1>
+
+<form action="/products/edit" method="POST">
+  <div class="input-field">
+    <input
+      id="title"
+      type="text"
+      name="title"
+      class="validate"
+      required
+      value="{{product.title}}"
+    />
+    <label for="title">Title</label>
+    <span class="helper-text" data-error="Add title"></span>
+  </div>
+  <div class="input-field">
+    <input
+      id="price"
+      type="text"
+      name="price"
+      class="validate"
+      required
+      value="{{product.price}}"
+    />
+    <label for="price">Price</label>
+    <span class="helper-text" data-error="Add price"></span>
+  </div>
+  <div class="inut-field">
+    <input
+      id="image"
+      type="text"
+      name="image"
+      class="validate"
+      required
+      value="{{product.image}}"
+    />
+    <label for="image">Image URL</label>
+    <span class="helper-text" data-error="Enter URL image"></span>
+  </div>
+  <input type="hidden" name="id" value="{{product.id}}" />
+  <button class="btn btn-primary">Edit product</button>
+</form>

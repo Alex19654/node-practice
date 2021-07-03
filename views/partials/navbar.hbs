@@ -1,24 +1,30 @@
-  <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Market App</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        {{#if isHome}}
-            <li class="active"><a href="/">Main Page</a></li>
-        {{else}}
-            <li><a href="/">Main Page</a></li>
-        {{/if}}
+<nav>
+  <div class="nav-wrapper">
+    <a href="/" class="brand-logo">Market App</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      {{#if isHome}}
+        <li class="active"><a href="/">Main Page</a></li>
+      {{else}}
+        <li><a href="/">Main Page</a></li>
+      {{/if}}
 
-        {{#if isProducts}}
-            <li class="active"><a href="/products">Products</a></li>
-        {{else}}
-            <li><a href="/products">Products</a></li>
-        {{/if}}
+      {{#if isProducts}}
+        <li class="active"><a href="/products">Products</a></li>
+      {{else}}
+        <li><a href="/products">Products</a></li>
+      {{/if}}
 
-        {{#if isAdd}}
-            <li class="active"><a href="/add">Add product</a></li>
-        {{else}}
-            <li><a href="/add">Add product</a></li>
-        {{/if}}
-      </ul>
-    </div>
-  </nav>
+      {{#if isAdd}}
+        <li class="active"><a href="/add">Add product</a></li>
+      {{else}}
+        <li><a href="/add">Add product</a></li>
+      {{/if}}
+
+      {{#if isCard}}
+        <li class="active"><a href="/card">Shop basket</a></li>
+      {{else}}
+        <li><a href="/card">Shop basket</a></li>
+      {{/if}}
+    </ul>
+  </div>
+</nav>

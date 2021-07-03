@@ -57,6 +57,33 @@ class Product {
       );
     });
   }
+
+  /* Static method, to update data of product */
+  static async update(product) {
+    const products = await Product.getAll();
+    const idProduct = products.findIndex((prd) => prd.id === product.id);
+    products[idProduct] = product;
+
+    return new Promise((resolve, reject) => {
+      fs.writeFile(
+        path.join(__dirname, "..", "data", "products.json"),
+        JSON.stringify(products),
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
+
+  /* Static method, to get one product form all  */
+  static async getById(id) {
+    const products = await Product.getAll();
+    return products.find((prd) => prd.id === id);
+  }
 }
 
 module.exports = Product;
