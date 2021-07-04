@@ -24,18 +24,19 @@ if (cardElement) {
           if (card.products.length) {
             const html = card.products
               .map((prd) => {
+                console.log(prd);
                 return `
-                <tr>
-                  <td>{{prd.title}}</td>
-                  <td>{{prd.count}}</td>
-                  <td>
-                    <button
-                      class="btn btn-small js-remove"
-                      data-id="{{prd.id}}"
-                    >Delete</button>
-                  </td>
-                </tr>
-              `;
+                  <tr>
+                    <td>${prd.title}</td>
+                    <td>${prd.count}</td>
+                    <td>
+                      <button
+                        class="btn btn-small js-remove"
+                        data-id="${prd.id}"
+                      >Delete</button>
+                    </td>
+                  </tr>
+                `;
               })
               .join("");
             cardElement.querySelector("tbody").innerHTML = html;

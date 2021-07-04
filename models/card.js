@@ -13,7 +13,6 @@ class Card {
     const card = await Card.fetch();
     const idx = card.products.findIndex((prd) => prd.id === product.id);
     const candidate = card.products[idx];
-
     if (candidate) {
       candidate.count++;
       card.products[idx] = candidate;
