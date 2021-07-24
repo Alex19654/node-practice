@@ -24,7 +24,6 @@ if (cardElement) {
           if (card.products.length) {
             const html = card.products
               .map((prd) => {
-                console.log(prd);
                 return `
                   <tr>
                     <td>${prd.title}</td>
