@@ -3,7 +3,7 @@ const router = Router();
 const Product = require("../models/product");
 
 router.get("/", async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find().populate("uerId", "email name");
   res.render("products", {
     title: "Products",
     isProducts: true,

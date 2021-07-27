@@ -6,6 +6,7 @@ const exhbs = require("express-handlebars");
 const {
   allowInsecurePrototypeAccess,
 } = require("@handlebars/allow-prototype-access");
+const User = require("./models/user");
 
 const app = express(); // Create app object
 
@@ -29,6 +30,17 @@ app.use(express.static(path.join(__dirname, "public"))); // Add public folder wi
 app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.port || 3000;
 
+/* Middleware script */
+app.use(async (req, res, next) => {
+  try {
+    const user = await User.findById("60fbf60a3d7fe52a9e9316c0");
+    req.user = user;
+    next();
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 /* Registrate added routes with prefixes*/
 app.use("/", homeRoutes);
 app.use("/add", addRoutes);
@@ -44,6 +56,17 @@ async function start() {
       useFindAndModify: false,
       useUnifiedTopology: true,
     });
+    const candidate = await User.findOne();
+
+    if (!candidate) {
+      const user = new User({
+        email: "podgorodeczkij19@gmail.com",
+        name: "Alex",
+        cart: { items: [] },
+      });
+      await user.save();
+    }
+
     app.listen(PORT, () => {
       console.log("Server is running!");
     });
