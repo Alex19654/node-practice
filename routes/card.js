@@ -6,6 +6,7 @@ const Product = require("../models/product");
 function mapCartItems(cart) {
   return cart.items.map((prd) => ({
     ...prd.productId._doc,
+    id: prd.productId.id,
     count: prd.count,
   }));
 }
@@ -31,7 +32,7 @@ router.delete("/remove/:id", async (req, res) => {
     products,
     price: computePrice(products),
   };
-  res.status(200).json(card);
+  res.status(200).json(cart);
 });
 
 router.get("/", async (req, res) => {

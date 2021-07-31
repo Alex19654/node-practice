@@ -15,6 +15,7 @@ const homeRoutes = require("./routes/home");
 const addRoutes = require("./routes/add");
 const productsRoutes = require("./routes/products");
 const cardRoutes = require("./routes/card");
+const ordersRoutes = require("./routes/orders");
 
 /* Configure handlebars ob */
 const hbs = exhbs.create({
@@ -46,6 +47,7 @@ app.use("/", homeRoutes);
 app.use("/add", addRoutes);
 app.use("/products", productsRoutes);
 app.use("/card", cardRoutes);
+app.use("/orders", ordersRoutes);
 
 async function start() {
   try {

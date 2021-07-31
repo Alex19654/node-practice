@@ -18,7 +18,7 @@
             <td>
               <button
                 class="btn btn-small js-remove"
-                data-id="{{_id}}"
+                data-id="{{id}}"
               >Delete</button>
             </td>
           </tr>
@@ -26,6 +26,9 @@
       </tbody>
     </table>
     <p><strong>Price:</strong> <span class="price">{{price}}</span></p>
+    <form action="/orders" method="POST">
+      <button type="submit" class="btn">Order</button>
+    </form>
   {{else}}
     <p>Basket is empty</p>
   {{/if}}

@@ -50,7 +50,7 @@ userSchema.methods.addToCard = function (product) {
 userSchema.methods.removeFromCart = function (id) {
   let items = [...this.cart.items];
   const index = items.findIndex((prd) => {
-    return prd.productId.roString() === id.toString();
+    return prd.productId.toString() === id.toString();
   });
 
   if (items[index] === 1) {
@@ -60,6 +60,11 @@ userSchema.methods.removeFromCart = function (id) {
   }
 
   this.cart = { items };
+  return this.save();
+};
+
+userSchema.methods.clearCart = function () {
+  this.cart = { items: [] };
   return this.save();
 };
 
