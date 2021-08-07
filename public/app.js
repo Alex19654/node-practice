@@ -67,3 +67,6 @@ if (cardElement) {
     }
   });
 }
+
+/* Initialization of tabs for register/login */
+M.Tabs.init(document.querySelectorAll(".tabs"));
