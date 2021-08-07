@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const router = Router();
+const auth = require("../middleware/auth");
 const Product = require("../models/product");
 
 /* Helper function for mapping cart items */
@@ -18,13 +19,13 @@ function computePrice(products) {
   }, 0);
 }
 
-router.post("/add", async (req, res) => {
+router.post("/add", auth, async (req, res) => {
   const product = await Product.findById(req.body.id);
   await req.user.addToCard(product);
   res.redirect("/card");
 });
 
-router.delete("/remove/:id", async (req, res) => {
+router.delete("/remove/:id", auth, async (req, res) => {
   await req.user.removeFromCart(req.params.id);
   const user = await req.user.populate("cart.items.productId").execPopulate();
   const products = mapCartItems(user.cart);
@@ -35,7 +36,7 @@ router.delete("/remove/:id", async (req, res) => {
   res.status(200).json(cart);
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   const user = await req.user.populate("cart.items.productId").execPopulate();
 
   const products = mapCartItems(user.cart);

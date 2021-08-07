@@ -3,13 +3,19 @@ const path = require("path");
 const mongoose = require("mongoose");
 const Handlebars = require("handlebars");
 const session = require("express-session");
+const MongoStore = require("connect-mongodb-session")(session);
 const exhbs = require("express-handlebars");
 const {
   allowInsecurePrototypeAccess,
 } = require("@handlebars/allow-prototype-access");
 const User = require("./models/user");
 const varMiddleware = require("./middleware/variables");
+const userMiddleware = require("./middleware/user");
+
 const app = express(); // Create app object
+
+/* DB address */
+const MONGODB_URL = "mongodb+srv://Oleksandr:ZNdWp8fHk9763yU@cluster0.720qa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 /* Add routes */
 const homeRoutes = require("./routes/home");
@@ -32,14 +38,22 @@ app.set("views", "views"); // Set folder with views
 app.use(express.static(path.join(__dirname, "public"))); // Add public folder with scripts to express
 app.use(express.urlencoded({ extended: true }));
 
+/* Session connector to DB */
+const store = new MongoStore({
+  collection: "sessions",
+  uri: MONGODB_URL
+})
+
 /* Set session */
 app.use(session({
   secret: 'some secret value',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: store
 }));
 
 app.use(varMiddleware); // Use middleware for session functionality
+app.use(userMiddleware); // 
 
 const PORT = process.env.port || 3000;
 
@@ -53,23 +67,11 @@ app.use("/auth", authRoutes);
 
 async function start() {
   try {
-    const db =
-      "mongodb+srv://Oleksandr:ZNdWp8fHk9763yU@cluster0.720qa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-    await mongoose.connect(db, {
+    await mongoose.connect(MONGODB_URL, {
       useNewUrlParser: true,
       useFindAndModify: false, 
       useUnifiedTopology: true,
     });
-    // const candidate = await User.findOne();
-
-    // if (!candidate) {
-    //   const user = new User({
-    //     email: "podgorodeczkij19@gmail.com",
-    //     name: "Alex",
-    //     cart: { items: [] },
-    //   });
-    //   await user.save();
-    // }
 
     app.listen(PORT, () => {
       console.log("Server is running!");

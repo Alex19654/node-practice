@@ -1,15 +1,16 @@
 const { Router } = require("express");
 const router = Router();
 const Product = require("../models/product");
+const auth = require("../middleware/auth");
 
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
   res.render("add", {
     title: "Add product",
     isAdd: true,
   });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const product = new Product({
     title: req.body.title,
     price: req.body.price,
