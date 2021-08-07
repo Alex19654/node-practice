@@ -57,7 +57,7 @@ async function start() {
       "mongodb+srv://Oleksandr:ZNdWp8fHk9763yU@cluster0.720qa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
     await mongoose.connect(db, {
       useNewUrlParser: true,
-      useFindAndModify: false,
+      useFindAndModify: false, 
       useUnifiedTopology: true,
     });
     // const candidate = await User.findOne();
