@@ -21,6 +21,8 @@
             <label for="password">Password</label>
             <span class="helper-text" data-error="Enter password"></span>
          </div>
+
+         <input type="hidden" name="_csrf" value="{{csrf}}">
    
          <button class="btn btn-primary" type="submit">LOGIN</button>
        </form>
@@ -50,6 +52,8 @@
             <label for="confirm">Confirm password</label>
             <span class="helper-text" data-error="Enter password"></span>
          </div>
+         
+         <input type="hidden" name="_csrf" value="{{csrf}}">
          
          <button class="btn btn-primary" type="submit">REGISTER</button>
        </form>

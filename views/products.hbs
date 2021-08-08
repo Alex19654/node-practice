@@ -17,6 +17,7 @@
               <a href="/products/{{id}}/edit?allow=true" target="_blank">Edit
                 product</a>
               <form action="/card/add" method="POST">
+                <input type="hidden" name="_csrf" value="{{@root.csrf}}">
                 <input type="hidden" name="id" value="{{id}}" />
                 <button class="btn btn-primary">Buy</button>
               </form>

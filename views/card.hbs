@@ -19,6 +19,7 @@
               <button
                 class="btn btn-small js-remove"
                 data-id="{{id}}"
+                data-csrf="{{@root.csrf}}"
               >Delete</button>
             </td>
           </tr>
@@ -27,6 +28,7 @@
     </table>
     <p><strong>Price:</strong> <span class="price">{{price}}</span></p>
     <form action="/orders" method="POST">
+      <input type="hidden" name="_csrf" value="{{csrf}}">
       <button type="submit" class="btn">Order</button>
     </form>
   {{else}}
