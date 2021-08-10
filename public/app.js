@@ -54,6 +54,7 @@ if (cardElement) {
                       <button
                         class="btn btn-small js-remove"
                         data-id="${prd.id}"
+                        data-csrf="${csrf}"
                       >Delete</button>
                     </td>
                   </tr>

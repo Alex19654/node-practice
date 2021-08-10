@@ -54,7 +54,7 @@ userSchema.methods.removeFromCart = function (id) {
     return prd.productId.toString() === id.toString();
   });
 
-  if (items[index] === 1) {
+  if (items[index].count === 1) {
     items = items.filter((prd) => prd.productId.toString() !== id.toString());
   } else {
     items[index].count--;
