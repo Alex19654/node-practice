@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const flash = require("connect-flash");
 const csrf = require("csurf");
 const Handlebars = require("handlebars");
 const session = require("express-session");
@@ -9,14 +10,14 @@ const exhbs = require("express-handlebars");
 const {
   allowInsecurePrototypeAccess,
 } = require("@handlebars/allow-prototype-access");
-const User = require("./models/user");
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
 
 const app = express(); // Create app object
 
 /* DB address */
-const MONGODB_URL = "mongodb+srv://Oleksandr:ZNdWp8fHk9763yU@cluster0.720qa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const MONGODB_URL =
+  "mongodb+srv://Oleksandr:ZNdWp8fHk9763yU@cluster0.720qa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 /* Add routes */
 const homeRoutes = require("./routes/home");
@@ -42,19 +43,22 @@ app.use(express.urlencoded({ extended: true }));
 /* Session connector to DB */
 const store = new MongoStore({
   collection: "sessions",
-  uri: MONGODB_URL
-})
+  uri: MONGODB_URL,
+});
 
 /* Set session */
-app.use(session({
-  secret: 'some secret value',
-  resave: false,
-  saveUninitialized: false,
-  store: store
-}));
+app.use(
+  session({
+    secret: "some secret value",
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
 app.use(csrf());
+app.use(flash());
 app.use(varMiddleware); // Use middleware for session functionality
-app.use(userMiddleware); // 
+app.use(userMiddleware); //
 
 const PORT = process.env.port || 3000;
 
@@ -70,7 +74,7 @@ async function start() {
   try {
     await mongoose.connect(MONGODB_URL, {
       useNewUrlParser: true,
-      useFindAndModify: false, 
+      useFindAndModify: false,
       useUnifiedTopology: true,
     });
 
