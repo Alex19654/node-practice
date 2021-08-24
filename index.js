@@ -12,12 +12,9 @@ const {
 } = require("@handlebars/allow-prototype-access");
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
+const keys = require("./keys/index");
 
 const app = express(); // Create app object
-
-/* DB address */
-const MONGODB_URL =
-  "mongodb+srv://Oleksandr:ZNdWp8fHk9763yU@cluster0.720qa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 /* Add routes */
 const homeRoutes = require("./routes/home");
@@ -43,13 +40,13 @@ app.use(express.urlencoded({ extended: true }));
 /* Session connector to DB */
 const store = new MongoStore({
   collection: "sessions",
-  uri: MONGODB_URL,
+  uri: keys.MONGODB_URL,
 });
 
 /* Set session */
 app.use(
   session({
-    secret: "some secret value",
+    secret: keys.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
@@ -72,7 +69,7 @@ app.use("/auth", authRoutes);
 
 async function start() {
   try {
-    await mongoose.connect(MONGODB_URL, {
+    await mongoose.connect(keys.MONGODB_URL, {
       useNewUrlParser: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
