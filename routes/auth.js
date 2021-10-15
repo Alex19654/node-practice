@@ -1,19 +1,16 @@
 const { Router } = require("express");
 const router = Router();
 const User = require("../models/user");
+const {validationResult} = require('express-validator');
 const bcrypt = require("bcryptjs");
-const nodemailer = require("nodemailer");
-const sendgrid = require("nodemailer-sendgrid-transport");
+const mailgun = require("mailgun-js");
 const keys = require("../keys/index");
 const registration = require("../emails/registration");
 const crypto = require("crypto");
+const {registerValidators} = require('../utils/validators');
 const resetEmail = require("../emails/reset");
 
-const transporter = nodemailer.createTransport(
-  sendgrid({
-    auth: { api_key: keys.SEND_GRID_API_KEY },
-  })
-);
+const mgInstance = mailgun({apiKey: keys.API_KEY_MG, domain: keys.DOMAIN}); // mailgun setting instance
 
 router.get("/login", async (req, res) => {
   res.render("auth/login", {
@@ -55,10 +52,16 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", registerValidators, async (req, res) => {
   try {
     const { email, password, name, confirm } = req.body;
     const candidate = await User.findOne({ email });
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+      req.flash('registerError', errors.array()[0].msg);
+      return res.status(422).redirect('/auth/login#register');
+    }
 
     if (candidate) {
       req.flash("registerError", "User with such name exists!");
@@ -76,7 +79,7 @@ router.post("/register", async (req, res) => {
       });
       await user.save();
       res.redirect("/auth/login#login");
-      await transporter.sendMail(registration(email));
+      await mgInstance.messages().send(registration(user.email));
     }
   } catch (err) {
     console.log(err);
@@ -138,7 +141,7 @@ router.post("/reset", (req, res) => {
         candidate.resetToken = token;
         candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
         await candidate.save();
-        await transporter.sendMail(resetEmail(candidate.email, token));
+        await mgInstance.messages().send(resetEmail(candidate.email, token));
         res.redirect("/auth/login");
       } else {
         req.flash("error", "There is not such email.");

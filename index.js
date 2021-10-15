@@ -29,6 +29,7 @@ const hbs = exhbs.create({
   defaultLayout: "main",
   extname: "hbs",
   handlebars: allowInsecurePrototypeAccess(Handlebars),
+  helpers: require('./utils/hbs-helpers')
 });
 
 app.engine("hbs", hbs.engine); // Registrate 'hbs' in app
