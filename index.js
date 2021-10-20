@@ -13,7 +13,8 @@ const {
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
 const keys = require("./keys/index");
-
+const errorHandle = require("./middleware/error");
+const fileMiddleware = require("./middleware/file");
 const app = express(); // Create app object
 
 /* Add routes */
@@ -23,6 +24,7 @@ const productsRoutes = require("./routes/products");
 const cardRoutes = require("./routes/card");
 const ordersRoutes = require("./routes/orders");
 const authRoutes = require("./routes/auth");
+const profileRoutes = require("./routes/profile");
 
 /* Configure handlebars ob */
 const hbs = exhbs.create({
@@ -36,6 +38,7 @@ app.engine("hbs", hbs.engine); // Registrate 'hbs' in app
 app.set("view engine", "hbs"); // Set hbs
 app.set("views", "views"); // Set folder with views
 app.use(express.static(path.join(__dirname, "public"))); // Add public folder with scripts to express
+app.use('/images', express.static(path.join(__dirname, "images"))); // Add images folder with scripts to express
 app.use(express.urlencoded({ extended: true }));
 
 /* Session connector to DB */
@@ -53,6 +56,7 @@ app.use(
     store: store,
   })
 );
+app.use(fileMiddleware.single('avatar'));
 app.use(csrf());
 app.use(flash());
 app.use(varMiddleware); // Use middleware for session functionality
@@ -67,6 +71,8 @@ app.use("/products", productsRoutes);
 app.use("/card", cardRoutes);
 app.use("/orders", ordersRoutes);
 app.use("/auth", authRoutes);
+app.use("/profile", profileRoutes);
+app.use(errorHandle);
 
 async function start() {
   try {

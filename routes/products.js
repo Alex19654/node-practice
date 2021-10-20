@@ -2,6 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const Product = require("../models/product");
 const auth = require("../middleware/auth");
+const { productValidators} = require("../utils/validators");
 
 router.get("/", async (req, res) => {
 
@@ -42,9 +43,14 @@ router.get("/:id/edit", auth, async (req, res) => {
   
 });
 
-router.post("/edit", auth, async (req, res) => {
+router.post("/edit", auth, productValidators, async (req, res) => {
   try{
+    const errors = validationResult(req);
     const {id} = req.body;
+    
+    if(!errors.isEmpty()) {
+      return res.status(422).render(`/products/${id}/edit?allow=true`);
+    }
     delete req.body.id;
     const product = await Product.findById(id);
     if(product.userId.toString() === req.user._id.toString()) {
